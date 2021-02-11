@@ -2,7 +2,7 @@ const Discord = require("./jscord/index.js");
 const client = new Discord.Client();
 
 client.on("ready", () => {
-    console.log(`${client.user.username} is online!`);
+    console.log(`${client.user.username} logged in!`);
 });
 
 client.on("message", (message) => {
