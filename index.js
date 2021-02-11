@@ -9,4 +9,4 @@ client.on("message", (message) => {
     console.log(message.content);
 });
 
-client.login("NzQ2ODIwMzE5MTEyNzI0NjUz.X0F4nw.7Lf-f_-fJ0YXelEpF7-2nhPfcRw");
+client.login("token");
