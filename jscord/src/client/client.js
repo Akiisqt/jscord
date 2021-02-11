@@ -1,11 +1,11 @@
-const WebSocketManager = require("../ws/webSocketManager.js"), EventEmitter = require('events');
+const WebSocketManager = require("../ws/webSocketManager.js"), { EventEmitter } = require('events');
 
 class Client extends EventEmitter {
     constructor() {
         super();
         this.ws = new WebSocketManager(this);
+        this._user;
     }
-    _user() {}
     async login(token) {
         this.ws.connect(token);
     }

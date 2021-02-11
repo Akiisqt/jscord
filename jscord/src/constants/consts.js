@@ -1,5 +1,6 @@
 module.exports.constants = {
     GATEWAY: "wss://gateway.discord.gg/?v=6&encoding=json",
+    API: "https://discord.com/api/v8"
 }
 
 module.exports.OPCODES = {

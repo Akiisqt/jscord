@@ -1,16 +1,8 @@
-const Client = require("../client/client.js");
+const Client = require("../client/client.js"), clientUser = require("../client/clientUser.js");
 
 module.exports.execute = async function (client, payload) {
     const { user } = payload.d;
-    client.user = {
-        verified: user.verified,
-        username: user.username,
-        id: user.id,
-        flags: user.flags,
-        email: user.email,
-        discriminator: user.discriminator,
-        bot: user.bot,
-        avatar: user.avatar,
-    };
-    console.log(`Logged in as ${client.user.username}!`);
+    client.user = new clientUser(client, user);
+
+    client.emit("ready");
 }

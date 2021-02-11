@@ -1,4 +1,4 @@
-const WebSocket = require("ws"), EventEmitter = require('events'), { constants, OPCODES } = require("../constants/consts.js"), payloads = require("../constants/payloads.js"), Client = require("../client/client.js");
+const WebSocket = require("ws"), { EventEmitter } = require('events'), { constants, OPCODES } = require("../constants/consts.js"), payloads = require("../constants/payloads.js"), Client = require("../client/client.js");
 
 class WebSocketManager extends EventEmitter {
     constructor() {
@@ -26,12 +26,17 @@ class WebSocketManager extends EventEmitter {
                         break;
                 }
                 if (event) {
+                    try {
                     const Module = await require(`../handlers/${event}.js`);
+                    console.log(this.client)
                     Module.execute(this.client, payload);
+                    } catch(e) {
+                        console.log(e)
+                    }
                 }
-            })
+            });
         } catch (e) {
-            console.log(e)
+            console.log(e);
             return e;
         }
     }
