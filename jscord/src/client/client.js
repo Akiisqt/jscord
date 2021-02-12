@@ -1,4 +1,4 @@
-const WebSocketManager = require("../ws/webSocketManager.js"), { EventEmitter } = require('events');
+const WebSocketManager = require("../ws/webSocketManager.js"), { EventEmitter } = require('events'), { start } = require("../utils/resolve.js");
 
 class Client extends EventEmitter {
     constructor(intents = "513") {
@@ -16,6 +16,7 @@ class Client extends EventEmitter {
    */
     async login(token) {
         this.token = token;
+        new start(this.token);
         this.ws.connect(this.token, this.intents);
     }
     set user(user) {
