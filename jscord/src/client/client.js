@@ -1,7 +1,7 @@
 const WebSocketManager = require("../ws/webSocketManager.js"), { EventEmitter } = require('events'), { start } = require("../utils/resolve.js");
 
 class Client extends EventEmitter {
-    constructor(intents = "513") {
+    constructor({ intents = "32509" } = {}) {
         super();
         this.ws = new WebSocketManager(this);
         this.token;
