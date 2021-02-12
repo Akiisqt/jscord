@@ -1,6 +1,13 @@
 const Client = require("../client/client.js"), fetch = require("node-fetch"), { constants } = require("../constants/consts.js");
 var auth;
 
+
+/**
+* Gives token to resolve.
+* https://discord.com/developers/applications
+* @param {String}
+* Token
+*/
 class start {
     constructor(token) {
         auth = token;
@@ -15,7 +22,14 @@ function makeid(length) {
     }
     return result;
 }
-
+/**
+* Gives token to resolve.
+* https://discord.com/developers/applications
+* @param {String}
+* Content
+* @param {Number}
+* channel_id
+*/
 async function createMessage(content, channelId, nonce) {
     if (!nonce) {
         nonce = makeid(12);
