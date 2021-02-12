@@ -4,10 +4,12 @@ class Client extends EventEmitter {
     constructor() {
         super();
         this.ws = new WebSocketManager(this);
+        this.token;
         this._user;
     }
     async login(token) {
-        this.ws.connect(token);
+        this.token = token;
+        this.ws.connect(this.token);
     }
     set user(user) {
         this._user = user;
