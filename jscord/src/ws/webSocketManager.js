@@ -10,18 +10,16 @@ class WebSocketManager extends EventEmitter {
     async connect(token, intents) {
         try {
             this.ws = new WebSocket(constants.GATEWAY);
-            this.intents = intents;
             this.ws.on('message', async (msg) => {
                 const payload = JSON.parse(msg.toString()),
                     { t: event, op } = payload;
-
                 switch (op) {
                     case OPCODES.DISPATCH:
                         break;
                     case OPCODES.HELLO:
                         const { heartbeat_interval } = payload.d;
                         this.interval = this.heartbeat(heartbeat_interval);
-                        await this.identify(token);
+                        await this.identify(token, intents);
                         break;
                     case OPCODES.HEARTBEAT_ACK:
                         break;
@@ -55,9 +53,9 @@ class WebSocketManager extends EventEmitter {
     * @param {String}
     * Token
     */
-    async identify(token) {
+    async identify(token, intents) {
         payloads.Identify.d.token = token;
-        payloads.Identify.d.intents = this.intents;
+        payloads.Identify.d.intents = intents;
         return this.ws.send(JSON.stringify(payloads.Identify));
     }
 }
