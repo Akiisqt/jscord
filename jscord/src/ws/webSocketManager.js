@@ -7,9 +7,10 @@ class WebSocketManager extends EventEmitter {
         this.interval = 0;
         this.client = client;
     }
-    async connect(token) {
+    async connect(token, intents) {
         try {
             this.ws = new WebSocket(constants.GATEWAY);
+            this.intents = intents;
             this.ws.on('message', async (msg) => {
                 const payload = JSON.parse(msg.toString()),
                     { t: event, op } = payload;
@@ -37,13 +38,26 @@ class WebSocketManager extends EventEmitter {
             return e;
         }
     }
+    /**
+    * The interval (in milliseconds) the client should heartbeat with.
+    * https://discord.com/developers/docs/topics/gateway#hello
+    * @param {Number}
+    * Int
+    */
     heartbeat(ms) {
         return setInterval(() => {
             this.ws.send(JSON.stringify(payloads.Heartbeat));
         }, ms);
     }
+    /**
+    * Used to trigger the initial handshake with the gateway.
+    * https://discord.com/developers/docs/topics/gateway#identify
+    * @param {String}
+    * Token
+    */
     async identify(token) {
         payloads.Identify.d.token = token;
+        payloads.Identify.d.intents = this.intents;
         return this.ws.send(JSON.stringify(payloads.Identify));
     }
 }

@@ -1,5 +1,5 @@
-const Discord = require("./jscord/index.js"), fetch = require("node-fetch"), { constants, OPCODES } = require("./jscord/src/constants/consts.js");
-const client = new Discord.Client();
+const Discord = require("./jscord/index.js"), fetch = require("node-fetch"), { constants } = require("./jscord/src/constants/consts.js");
+const client = new Discord.Client({ intents: "513" });
 
 client.on("ready", () => {
     console.log(`${client.user.username} logged in!`);
