@@ -1,6 +1,5 @@
 class clientUser {
     constructor(client, user) {
-        super();
         this.verified = user.verified;
         this.username = user.username;
         this.id = user.id;
@@ -9,6 +8,7 @@ class clientUser {
         this.discriminator = user.discriminator;
         this.bot = user.bot;
         this.avatar = user.avatar;
+
     }
 }
 
