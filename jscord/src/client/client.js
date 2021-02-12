@@ -1,12 +1,12 @@
 const WebSocketManager = require("../ws/webSocketManager.js"), { EventEmitter } = require('events');
 
 class Client extends EventEmitter {
-    constructor({ intents }) {
+    constructor(intents = "513") {
         super();
         this.ws = new WebSocketManager(this);
         this.token;
-        this._user;
         this.intents = intents;
+        this._user;
     }
     /**
    * Attepts connection to discord-gateway.
