@@ -23,24 +23,41 @@ function makeid(length) {
     return result;
 }
 /**
-* Gives token to resolve.
-* https://discord.com/developers/applications
-* @param {String}
-* Content
+* Creates message.
+* https://discord.com/developers/docs/resources/channel#create-message
 * @param {Number}
-* channel_id
+* Channel_ID
+* @type {}
+* Options
 */
-async function createMessage(content, channelId, nonce) {
-    if (!nonce) {
-        nonce = makeid(12);
-    }
-
+async function createMessage(channelId, options = { content: "", tts: false, embeds: {}, reference: {} }, nonce) {
+    if (!nonce) nonce = makeid(12);
     const data = {
-        "content": content,
-        "tts": false,
-        nonce
+        "content": options.content,
+        nonce,
+        "tts": options.tts,
+        "embed": options.embeds,
+        "message_reference": { message_id: options.reference || null },
     };
-
+    /*var data = new Object(); // We'll have to do attachment form data crap later
+    if (!options.attachments) {
+        data = {
+            "content": options.content,
+            nonce,
+            "tts": options.tts,
+            "embed": options.embeds,
+            "message_reference": { message_id: options.reference || null },
+        };
+    } else {
+        if (options.embeds || options.reference) console.warn("Embed & Reference can't be used with attactments.");
+        data = {
+            "content": options.content,
+            nonce,
+            "tts": options.tts,
+            "file": "",
+            "payload_json"
+        }; 
+    }*/
     const headers = { "Content-Type": "application/json", "Authorization": `Bot ${auth}` };
 
     const response = await fetch(`${constants.API}/channels/${channelId}/messages`, {
@@ -53,7 +70,7 @@ async function createMessage(content, channelId, nonce) {
         const wait = parseInt(response.headers.get("Retry-After")) * 1000;
         console.log(`Rate limit hit! Waiting ${wait}ms. (raw: ${(wait / 1000)})`);
         setTimeout(function () {
-            createMessage(content, channelId);
+            createMessage(channelId, options);
         }, wait);
     } else {
         response.json().then((msg) => {

@@ -10,16 +10,16 @@ client.on("message", async (message) => {
     let messageArray = message.content.split(" "), args = messageArray.slice(1);
     switch (messageArray[0]) {
         case "!ping":
-            await Discord.createMessage("Pong", message.channel_id);
+            await Discord.createMessage(message.channel_id, { embeds: { "title": "H" }, reference: message.id });
             break;
         case "!eval":
             const t1 = new Date().getTime();
             try {
-                await Discord.createMessage(`\`\`\`js\n${eval(args.join(" "))}\`\`\``, message.channel_id);
+                await Discord.createMessage(message.channel_id, `\`\`\`js\n${eval(args.join(" "))}\`\`\``);
                 const t2 = new Date().getTime();
                 await Discord.createMessage(`${(t2 - t1)} ms`, message.channel_id);
             } catch (e) {
-                await Discord.createMessage(`\`\`\`diff\n-${e}\`\`\``, message.channel_id);
+                await Discord.createMessage(message.channel_id, `\`\`\`diff\n-${e}\`\`\``);
                 const t2 = new Date().getTime();
                 await Discord.createMessage(`Took ${(t2 - t1)} ms`, message.channel_id);
             }
