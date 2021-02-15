@@ -10,7 +10,7 @@ module.exports = {
                 if (content && content.startsWith("image/")) {
                     buf = response.buffer();
                 }
-            } else if (fs.existsSync(path)) buf = fs.readFileSync(path);
+            } else if (fs.existsSync(path)) buf = fs.createReadStream(path);
         } catch (e) {
             console.log(e)
             return buf;

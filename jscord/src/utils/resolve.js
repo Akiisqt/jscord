@@ -32,29 +32,26 @@ function makeid(length) {
 * Options
 */
 async function createMessage(channelId, options = { content: "", tts: false, attachments: { file: "", name: "" }, embeds: {}, reference: "" }) {
-    var data = { headers: {}, body: {} };
+    let body;
+    const headers = { "Authorization": `Bot ${auth}` };
+
     if (options && options.attachments && options.attachments.file && options.attachments.name) {
-        const form = await createFormMessage({ content: options.content, tts: options.content, attachments: { file: options.attachments.file, name: options.attachments.name }, embeds: options.embeds, reference: options.reference });
-        data.headers = form.headers;
-        data.body = form.body
+        body = await createFormMessage({ content: options.content, tts: options.tts, attachments: { file: options.attachments.file, name: options.attachments.name }, embeds: options.embeds, reference: options.reference });
     } else {
-        data.headers = {
-            "Content-Type": "application/json"
-        }
-        data.body = {
+        headers = { ...headers, "Content-Type": "application/json" };
+        body = JSON.stringify({
             "content": options.content,
             "nonce": makeid(12),
             "tts": options.tts,
             "embed": options.embeds,
             "message_reference": { message_id: options.reference || null },
-        }
+        });
     };
 
-    const headers = { ...data.headers, "Authorization": `Bot ${auth}` };
     const response = await fetch(`${constants.API}/channels/${channelId}/messages`, {
         method: "POST",
         headers,
-        body: JSON.stringify(data.body),
+        body,
     });
     console.log(response, response.status)
     if (response.status === 429) {
@@ -72,20 +69,19 @@ async function createMessage(channelId, options = { content: "", tts: false, att
 
 async function createFormMessage(options = { content: "", tts: false, attachments: { file: "", name: "" }, embeds: {}, reference: "" }) {
     console.log(options)
-    const buf = await getBuf(options.attachments?.file);
+    const buf = await getBuf(options.attachments?.file) ?? Buffer.from("lmao xd", "utf8" );
     const form = new FormData();
     form.append("content", options.content);
     form.append("nonce", makeid(12));
     form.append("tts", options.tts.toString());
-    form.append("file", await (await fetch(options.attachments?.file)).buffer(), options.attachments?.name ?? "file");
-    form.append("payload_json", JSON.stringify({ "embed": options.embeds, "message_reference": { message_id: options.reference || null }, }), { "Content-Disposition": "form-data", name: "file", filename: options.attachments?.name ?? "file", "Content-Type": "image/gif" });
+    form.append("file", buf, { contentType: "image/gif", filename: options.attachments?.name ?? "file" });
+    form.append("payload_json", JSON.stringify(
+        {
+            "embed": options.embeds,
+            "message_reference": { message_id: options.reference || null },
+        }));
 
-    return {
-        headers: {
-            "Content-Type": "multipart/form-data"
-        },
-        body: form.getHeaders()
-    };
+    return form;
 }
 
 module.exports = {
