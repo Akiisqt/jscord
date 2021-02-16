@@ -10,7 +10,10 @@ client.on("message", async (message) => {
     let messageArray = message.content.split(" "), args = messageArray.slice(1);
     switch (messageArray[0]) {
         case "!ping":
-            await Discord.createMessage(message.channel_id, { content: "Pong", tts: true, attachments: { file: "https://cdn.discordapp.com/attachments/798285555997474836/810983648929120286/a.gif", name: "file.gif" }, embeds: { "title": "Ping?", "description": "Pong!" }, reference: message.id });
+            const tt1 = new Date().getTime();
+            await Discord.createMessage(message.channel_id, { content: "Pong", reference: message.id });
+            const tt2 = new Date().getTime();
+            console.log(tt2 - tt1);
             break;
         case "!eval":
             const t1 = new Date().getTime();
